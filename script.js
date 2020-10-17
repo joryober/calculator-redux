@@ -48,12 +48,25 @@ numBtns.forEach((numBtn) => {
 
 let operBtns = document.querySelectorAll(".oper");
 operBtns.forEach((operBtn) => {
+  //Need to refactor into "evaluate" function that can be used in both equalBtn and operBtn
   operBtn.addEventListener("click", (e) => {
     calculateArr = calculateValue.split(" ");
     if (calculateArr.length === 1) {
       calculateValue += ` ${e.target.textContent} `;
       displayValue = "";
+    } else if (calculateArr[2] === "") {
+      input.value = "ERR";
+      displayValue = "";
+      calculateValue = "";
+      return;
     } else if (calculateArr.length === 3) {
+      if (calculateArr[1] === "/" && calculateArr[2] === "0") {
+        input.value = "ERR (DIV BY 0)";
+        displayValue = "";
+        calculateValue = "";
+        return;
+      }
+
       calculateArr[0] = +calculateArr[0];
       calculateArr[2] = +calculateArr[2];
 
@@ -75,8 +88,9 @@ operBtns.forEach((operBtn) => {
   });
 });
 
-// EQUAL BUTTON CRASHES PROGRAM IF ONLY ONE VALUE ENTERED
 let equalBtn = document.querySelector(".eq");
+
+//Need to refactor into "evaluate" function that can be used in both equalBtn and operBtn
 equalBtn.addEventListener("click", () => {
   calculateArr = calculateValue.split(" ");
   if (calculateArr[0] === "") return;
@@ -84,12 +98,18 @@ equalBtn.addEventListener("click", () => {
     input.value = calculateArr[0];
     displayValue = calculateArr[0];
     calculateValue = calculateArr[0];
-  } else if (calculateArr.length === 2) {
+  } else if (calculateArr[2] === "") {
     input.value = "ERR";
     displayValue = "";
     calculateValue = "";
-    calculateArr = [];
   } else {
+    if (calculateArr[1] === "/" && calculateArr[2] === "0") {
+      input.value = "ERR (DIV BY 0)";
+      displayValue = "";
+      calculateValue = "";
+      return;
+    }
+
     calculateArr[0] = +calculateArr[0];
     calculateArr[2] = +calculateArr[2];
 
